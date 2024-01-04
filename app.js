@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const connectDB =  require('./config/database');
+const cookieParser = require('cookie-parser');
 
 /**
  * -------------- GENERAL SETUP ----------------
@@ -30,6 +31,9 @@ app.use(passport.initialize());
 // Instead of using body-parser middleware, use the new Express implementation of the same thing
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// Use cookie-parser middleware
+app.use(cookieParser());
 
 app.use(cors());
 

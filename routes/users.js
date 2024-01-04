@@ -6,8 +6,11 @@ const User = require('../models/User');
 const utils = require('../lib/utils');
 
 router.get('/protected', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-  res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
-  // res.send('<h2>You are successfully authenticated to this route! !</h2>  --> <a href="/register">Login</a>');
+  // Passport should have extracted the token from the Authorization header
+  // and verified it. You can access the user details using req.user.
+  // console.log(req)
+  const user = req.user;
+  res.status(200).json({ success: true, user, msg: "You are successfully authenticated to this route!" });
 });
 
 router.post('/login', function(req, res, next){
@@ -21,9 +24,11 @@ router.post('/login', function(req, res, next){
           console.log(isValid);
 
           if (isValid) {
-          console.log(isValid);
               const tokenObject = utils.issueJWT(user);
-              res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+              // res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+
+              res.cookie('jwt', tokenObject.token, { httpOnly: true, secure: true });
+              res.redirect('/users/protected');
           } else {
             res.status(401).json({ success: false, msg: "you entered the wrong password" });
           }
