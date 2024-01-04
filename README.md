@@ -152,3 +152,7 @@ router.post('/login', function(req, res, next){
             next(err);
         });
 });
+
+
+
+https://www.zachgollwitzer.com/posts/passport-js-course
